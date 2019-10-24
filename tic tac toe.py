@@ -40,12 +40,12 @@ def on_mouse_down(pos):
         x1 = i1 * cell_size
         x2 = i * cell_size
         x3 = i2 * cell_size
-        if x > x1 and x < x2:
+        if x1 < x < x2:
             valx = i
-        y1 = i1 * cell_size
-        y2 = i * cell_size
-        y3 = i2 * cell_size
-        if y > y1 and y < y2:
+        y1 = x1
+        y2 = x2
+        y3 = x3
+        if y1 < y < y2:
             valy = i
 
     #get's the the single number that corresponds with that cell
