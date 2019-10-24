@@ -50,26 +50,36 @@ def on_mouse_down(pos):
 
     #get's the the single number that corresponds with that cell
     grid_num = ((valy - 1) * 3) + valx
+    grid_num = grid_num - 1
 
-
+    #PLAYER1
     if turn % 2 != 0:
         #NB: x and y co-ordinates as tuple
-        cross = Actor("ximage", ((valx * cell_size) - 80, (valy * cell_size) - 82))
-        crosses.append(cross)
-
-        check[grid_num - 1] = "x"
+        if check[grid_num] == "":
+            cross = Actor("ximage", ((valx * cell_size) - 80, (valy * cell_size) - 82))
+            crosses.append(cross)
+            check[grid_num] = "x"
+            print("correct")
+        else:
+            print("sorry, cell occupied")
+            turn -= 1
 
         if check_vict(check) == "xyes":
             print("player 1 wins")
 
+    #PLAYER2
     if turn % 2 == 0:
-        nought = Actor("oimage", ((valx * cell_size) - 80, (valy * cell_size) - 82))
-        noughts.append(nought)
-
-        check[grid_num - 1] = "o"
+        if check[grid_num] == "":
+            nought = Actor("oimage", ((valx * cell_size) - 80, (valy * cell_size) - 82))
+            noughts.append(nought)
+            check[grid_num] = "o"
+        else:
+            print("sorry, cell occupied")
+            turn -= 1
 
         if check_vict(check) == "oyes":
             print("player 2 wins")
+
 
 
 #NB: checks if anyone has won
