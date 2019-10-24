@@ -5,8 +5,7 @@ grid = Actor("grid")
 crosses = []
 noughts = []
 check = []
-check = [0,0,0,0,0,0,0,0,0]
-#print(check[0])
+check = ["","","","","","","","",""]
 
 WIDTH = grid.width
 HEIGHT = grid.height
@@ -19,7 +18,6 @@ cell_size = 166
 size_across = 3
 size_down = 3
 grid_num = 0
-
 
 def draw():
     screen.clear()
@@ -52,7 +50,6 @@ def on_mouse_down(pos):
 
     #get's the the single number that corresponds with that cell
     grid_num = ((valy - 1) * 3) + valx
-    print(grid_num)
 
 
     if turn % 2 != 0:
@@ -77,26 +74,26 @@ def on_mouse_down(pos):
 
 #NB: checks if anyone has won
 def check_vict(list):
-    if str(list[0]) + str(list[4]) + str(list[8]) == "xxx":
+    if list[0] + list[4] + list[8] == "xxx":
         return "xyes"
-    if str(list[2]) + str(list[4]) + str(list[6]) == "xxx":
+    if list[2] + list[4] + list[6] == "xxx":
         return "xyes"
-    if str(list[0]) + str(list[4]) + str(list[8]) == "ooo":
+    if list[0] + list[4] + list[8] == "ooo":
         return "oyes"
-    if str(list[2]) + str(list[4]) + str(list[6]) == "ooo":
+    if list[2] + list[4] + list[6] == "ooo":
         return "oyes"
 
     for i in range(3):
         i = i * 3
-        if str(list[0 + i]) + str(list[1 + i]) + str(list[2 + i]) == "xxx" :
+        if list[0 + i] + list[1 + i] + list[2 + i] == "xxx" :
             return "xyes"
-        if str(list[0 + i]) + str(list[1 + i]) + str(list[2 + i]) == "ooo" :
+        if list[0 + i] + list[1 + i] + list[2 + i] == "ooo" :
             return "oyes"
 
     for i in range(3):
-        if str(list[0 + i]) + str(list[3 + i]) + str(list[6 + i]) == "xxx" :
+        if list[0 + i] + list[3 + i] + list[6 + i] == "xxx" :
             return "xyes"
-        if str(list[0 + i]) + str(list[3 + i]) + str(list[6 + i]) == "ooo" :
+        if list[0 + i] + list[3 + i] + list[6 + i] == "ooo" :
             return "oyes"
 
 
