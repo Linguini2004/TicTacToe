@@ -33,20 +33,9 @@ def on_mouse_down(pos):
     global turn
     turn += 1
     x, y = pos
-    #NB: identifying what cell was selected
-    for i in range(1, size_across + 1):
-        i1 = i - 1
-        i2 = i + 1
-        x1 = i1 * cell_size
-        x2 = i * cell_size
-        x3 = i2 * cell_size
-        if x1 < x < x2:
-            valx = i
-        y1 = x1
-        y2 = x2
-        y3 = x3
-        if y1 < y < y2:
-            valy = i
+
+    valx = (x // cell_size) + 1
+    valy = (y // cell_size) + 1
 
     #get's the the single number that corresponds with that cell
     grid_num = ((valy - 1) * 3) + valx
