@@ -1,2 +1,2 @@
 # TicTacToe
-made by Davide Masini contains current and precious versions of tic tac toe.
+Made by Davide Masini and contains the current working version of this Tic Tac Toe program along with the required images and music. 
