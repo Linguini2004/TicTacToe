@@ -36,6 +36,7 @@ def draw():
             background="blue",
             color="yellow"
         )
+        sounds.tada.play()
 
 def on_mouse_down(pos):
     global turn, winner
