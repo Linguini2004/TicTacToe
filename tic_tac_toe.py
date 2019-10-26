@@ -11,6 +11,7 @@ WIDTH = grid.width
 HEIGHT = grid.height
 
 turn = 0
+winner = ""
 counter = 0
 num_cross = 5
 num_nought = 4
@@ -28,9 +29,17 @@ def draw():
     for nought in noughts:
         nought.draw()
 
+    if winner:
+        screen.draw.textbox(
+            "%s wins" % winner,
+            (0, HEIGHT / 3, WIDTH, HEIGHT / 3),
+            background="blue",
+            color="yellow"
+        )
+        sounds.tada.play()
 
 def on_mouse_down(pos):
-    global turn
+    global turn, winner
     turn += 1
     x, y = pos
 
@@ -56,7 +65,7 @@ def on_mouse_down(pos):
             turn -= 1
 
         if check_vict(check) == "xyes":
-            print("player 1 wins")
+            winner = "Player 1"
 
     #PLAYER2
     if turn % 2 == 0:
@@ -71,7 +80,7 @@ def on_mouse_down(pos):
             turn -= 1
 
         if check_vict(check) == "oyes":
-            print("player 2 wins")
+            winner = "Player 2"
 
 
 
