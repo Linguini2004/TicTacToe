@@ -41,6 +41,7 @@ def on_mouse_down(pos):
     grid_num = ((valy - 1) * 3) + valx
     grid_num = grid_num - 1
 
+
     #PLAYER1
     if turn % 2 != 0:
         #NB: x and y co-ordinates as tuple
@@ -57,6 +58,7 @@ def on_mouse_down(pos):
 
         if check_vict(check) == "xyes":
             print("player 1 wins")
+
 
     #PLAYER2
     if turn % 2 == 0:
