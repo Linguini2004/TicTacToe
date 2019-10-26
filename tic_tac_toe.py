@@ -1,5 +1,5 @@
 # tic tac toe
-# this game will be player vs player and will be made up of a cycle where each playyer takes turns
+# this game will be player vs player and will be made up of a cycle where each player takes turns
 grid = Actor("grid")
 
 crosses = []
@@ -33,28 +33,11 @@ def on_mouse_down(pos):
     global turn
     turn += 1
     x, y = pos
-<<<<<<< HEAD
 
     valx = (x // cell_size) + 1
     valy = (y // cell_size) + 1
-=======
-    #NB: identifying what cell was selected
-    for i in range(1, size_across + 1):
-        i1 = i - 1
-        i2 = i + 1
-        x1 = i1 * cell_size
-        x2 = i * cell_size
-        x3 = i2 * cell_size
-        if x1 < x < x2:
-            valx = i
-        y1 = x1
-        y2 = x2
-        y3 = x3
-        if y1 < y < y2:
-            valy = i
->>>>>>> 69ffc1b2d7ae3097456e6aea4dc2725f533328ad
 
-    #get's the the single number that corresponds with that cell
+    #gets the the single number that corresponds with that cell
     grid_num = ((valy - 1) * 3) + valx
     grid_num = grid_num - 1
 
