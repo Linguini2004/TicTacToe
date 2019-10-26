@@ -45,7 +45,9 @@ def on_mouse_down(pos):
     if turn % 2 != 0:
         #NB: x and y co-ordinates as tuple
         if check[grid_num] == "":
-            cross = Actor("ximage", ((valx * cell_size) - 80, (valy * cell_size) - 82))
+            destination_pos = ((valx * cell_size) - 80, (valy * cell_size) - 82)
+            cross = Actor("ximage", (0, 0))
+            animate(cross, pos=destination_pos)
             crosses.append(cross)
             check[grid_num] = "x"
             print("correct")
@@ -59,7 +61,9 @@ def on_mouse_down(pos):
     #PLAYER2
     if turn % 2 == 0:
         if check[grid_num] == "":
-            nought = Actor("oimage", ((valx * cell_size) - 80, (valy * cell_size) - 82))
+            destination_pos = ((valx * cell_size) - 80, (valy * cell_size) - 82)
+            nought = Actor("oimage", (0, 0))
+            animate(nought, pos=destination_pos)
             noughts.append(nought)
             check[grid_num] = "o"
         else:
