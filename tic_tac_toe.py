@@ -19,6 +19,9 @@ size_across = 3
 size_down = 3
 grid_num = 0
 
+ok = tone.create("A3", 0.5)
+fail = tone.create("C1", 0.5)
+
 def draw():
     screen.clear()
     grid.draw()
@@ -49,9 +52,11 @@ def on_mouse_down(pos):
             crosses.append(cross)
             check[grid_num] = "x"
             print("correct")
+            ok.play()
         else:
             print("sorry, cell occupied")
             turn -= 1
+            fail.play()
 
         if check_vict(check) == "xyes":
             print("player 1 wins")
@@ -62,9 +67,11 @@ def on_mouse_down(pos):
             nought = Actor("oimage", ((valx * cell_size) - 80, (valy * cell_size) - 82))
             noughts.append(nought)
             check[grid_num] = "o"
+            ok.play()
         else:
             print("sorry, cell occupied")
             turn -= 1
+            fail.play()
 
         if check_vict(check) == "oyes":
             print("player 2 wins")
