@@ -86,7 +86,7 @@ def on_mouse_down(pos):
         if button1.left < x < button1.right and button1.top < y < button1.bottom:
             time.sleep(0.25)
             mode = "playing_pvp"
-        if button2.left < x < button2.right and button2.top < y < button2.bottom:
+        if button2.left < x < button2.right and button2.top <   y < button2.bottom:
             time.sleep(0.25)
             mode = "playing_pvcpu"
             #print("sorry this feature is in development")
@@ -164,7 +164,7 @@ def playing_cpu():
                         if check[random_num1] == "":
                             grid_num = random_num1
                             break
-
+            print(firstxx)
         if cputurn == 2:
             if cpu_first == True:
                 while True:
@@ -208,10 +208,12 @@ def playing_cpu():
                         for i in range(0, 9):
                             if i != 4:
                                 if check[i] + check[4] == "xx":
-                                    grid_num = (4 - i) + 4
-                                    num4 = i
-                                    firstxx += 1
-
+                                    if check[(4 - i) + 4] == "":
+                                        grid_num = (4 - i) + 4
+                                        num4 = i
+                                        firstxx += 1
+                                        #print("hi")
+            print(firstxx)
         if cputurn == 3:
             for i in num_list1:
                 for j in num_list2:
@@ -232,21 +234,25 @@ def playing_cpu():
 
             print(cpu_winning)
             if cpu_winning == False:
-                if firstxx == 1:
-                    for i in range(0, 9):
-                        if i != 4:
-                            if check[i] + check[4] == "xx":
-                                grid_num = (4 - i) + 4
-                                num5 = i
-                                firstxx += 1
 
                 if firstxx == 2:
                     for i in range(0, 9):
                         if i != 4 and i != num4:
                             if check[i] + check[4] == "xx":
-                                grid_num = (4 - i) + 4
-                                num4 = i
-                                firstxx += 1
+                                if check[(4 - i) + 4] == "":
+                                    grid_num = (4 - i) + 4
+                                    num4 = i
+                                    firstxx += 1
+                                    #print("hi2")
+
+                if firstxx == 1:
+                    for i in range(0, 9):
+                        if i != 4:
+                            if check[i] + check[4] == "xx":
+                                if check[(4 - i) + 4] == "":
+                                    grid_num = (4 - i) + 4
+                                    num5 = i
+                                    firstxx += 1
 
                 if check[1] + check[4] + check[7] == "oox":
                     num3 = random.randint(1, 2)
@@ -297,6 +303,7 @@ def playing_cpu():
                         firstxox = False
 
         if cputurn == 4:
+            print("turn4", firstxx)
             for i in num_list1:
                 for j in num_list2:
                     if check[i] + check[j] == "oo":
@@ -323,19 +330,31 @@ def playing_cpu():
                         if check[var4] == "":
                             grid_num = (4 - i) + 4
 
-            if firstxx == 2:
-                for i in range(0, 9):
-                    if i != 4 and i != num5:
-                        if check[i] + check[4] == "xx":
-                            grid_num = (4 - i) + 4
-                            firstxx += 1
-
             if firstxx == 3:
                 for i in range(0, 9):
                     if i != 4 and i != num4 and i != num5:
                         if check[i] + check[4] == "xx":
-                            grid_num = (4 - i) + 4
-                            firstxx += 1
+                            if check[(4 - i) + 4] == "":
+                                grid_num = (4 - i) + 4
+                                firstxx += 1
+
+            if firstxx == 2:
+                for i in range(0, 9):
+                    if i != 4 and i != num5:
+                        if check[i] + check[4] == "xx":
+                            if check[(4 - i) + 4] == "":
+                                grid_num = (4 - i) + 4
+                                firstxx += 1
+
+            if firstxx == 1:
+                for i in range(0, 9):
+                    if i != 4:
+                        if check[i] + check[4] == "xx":
+                            if check[(4 - i) + 4] == "":
+                                grid_num = (4 - i) + 4
+                                firstxx += 1
+
+
 
             for i in range(0, 9):
                 if check[i] == "":
@@ -345,9 +364,8 @@ def playing_cpu():
                     if counter2 == 1:
                         var2 = i
                         counter2 += 1
-                        print("hello")
+
             if counter2 == 2:
-                print("hello")
                 var3 = random.randint(1, 2)
                 if var3 == 1:
                     grid_num = var1
@@ -355,7 +373,7 @@ def playing_cpu():
                 if var3 == 2:
                     grid_num = var2
                     print(grid_num)
-
+            print(firstxx)
         if cputurn == 5:
             if first_play == "player":
                 for i in range(0, 9):
