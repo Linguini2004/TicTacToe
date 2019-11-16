@@ -4,6 +4,7 @@ import time
 import random
 grid = Actor("grid")
 menu_back = Actor("menu_background")
+end_back = Actor("end_background")
 button1 = Actor("1button", (150, 420))
 button2 = Actor("2button", (350, 420))
 
@@ -27,6 +28,7 @@ grid_num = 0
 counter1 = 0
 counter3 = 0
 cputurn = 1
+end_text = ""
 first_play = "Player"
 center_first = False
 cpu_first = False
@@ -68,8 +70,12 @@ def draw():
         counter1 += 1
 
     if mode == "end":
-        pass
+        end_back.draw()
 
+def on_key_down(key):
+    global mode
+    if key == keys.LEFT:
+        mode = "end"
 
 def on_mouse_down(pos):
     global mode
@@ -90,9 +96,6 @@ def on_mouse_down(pos):
         if button2.left < x < button2.right and button2.top <   y < button2.bottom:
             time.sleep(0.25)
             mode = "playing_pvcpu"
-            #print("sorry this feature is in development")
-
-
 
 def playing_p(pos):
     global grid_num
@@ -101,7 +104,6 @@ def playing_p(pos):
     global counter3
     turn += 1
     counter3 += 1
-    print(counter3)
     x, y = pos
 
     valx = (x // cell_size) + 1
@@ -124,7 +126,8 @@ def playing_p(pos):
         turn -= 1
 
     if check_vict(check) == "xyes":
-            print("player wins")
+            end_text = "You Win/n so much for AI"
+            counter3 = 9
             mode = "end"
 
 def playing_cpu():
@@ -137,28 +140,35 @@ def playing_cpu():
     global firstxx
     global still_playing
     global counter3
+    global mode
     random_num1 = 0
     random_num2 = 0
+    last_resort_num = 0
     num_list1 = [1, 3, 5, 7]
     num_list2 = [0, 2, 6, 8]
+    numl1_it2 = [7, 5, 3, 1]
+    numl2_it2 = [8, 6, 2, 0]
     var1 = 0
     var2 = 0
     var3 = 0
     var4 = 0
+    var5 = 0
+    var6 = 0
     num1 = 0
     num2 = 0
     num3 = 0
     num4 = 0
     num5 = 0
+    iteration = 1
     counter1 = 1
     counter2 = 0
+    counter4 = 0
     already_done = False
     cpu_winning = False
     test = False
 
     if counter3 == 9:
         still_playing = False
-        print("yes")
 
     if still_playing == True:
 
@@ -174,7 +184,7 @@ def playing_cpu():
                         if check[random_num1] == "":
                             grid_num = random_num1
                             break
-            print(firstxx)
+
         if cputurn == 2:
             if cpu_first == True:
                 while True:
@@ -189,10 +199,15 @@ def playing_cpu():
                     for i in num_list1:
                         for j in num_list2:
                             if check[i] + check[j] == "xx":
-                                if j > i:
-                                    grid_num = i - (j - i)
-                                if i > j:
-                                    grid_num = (i - j) + i
+                                if j > i and i - (j - i) < 9:
+                                    if check[i - (j - i)] == "":
+                                        grid_num = i - (j - i)
+                                        already_done = True
+                                if i > j and (i -j) + i < 9:
+                                    if check[(i - j) + i] == "":
+                                        grid_num = (i - j) + i
+                                        already_done = True
+
 
                     for i in num_list2:
                         if counter1 == 1:
@@ -208,10 +223,15 @@ def playing_cpu():
                             counter1 = 2
                     if counter1 == 3:
                         if (num2 - num1) == 6:
-                            grid_num = num2 - 3
+                            if check[num2 - 3] == "":
+                                grid_num = num2 - 3
+                                already_done = True
+                                firstxox = False
                         if (num2 - num1) == 2:
-                            grid_num = num2 - 1
-                        firstxox = False
+                            if check[num2 - 1] == "":
+                                grid_num = num2 - 1
+                                already_done = True
+                                firstxox = False
 
                 if center_first ==  False:
                     if firstxx == 1:
@@ -220,9 +240,40 @@ def playing_cpu():
                                 if check[i] + check[4] == "xx":
                                     if check[(4 - i) + 4] == "":
                                         grid_num = (4 - i) + 4
+                                        already_done = True
                                         num4 = i
                                         firstxx += 1
 
+                if already_done == False:
+                    counter4 = 1
+                    for i in num_list1:
+                        if check[i] == "x":
+                            if counter4 == 1:
+                                var5 = i
+                                counter4 = 2
+                            if counter4 == 2:
+                                if i != var5:
+                                    var6 = i
+                                    counter4 = 3
+                    if counter4 == 3:
+                        if (var5, var6) == (1, 3):
+                            grid_num = 0
+                            already_done = True
+                        if (var5, var6) == (1, 5):
+                            grid_num = 2
+                            already_done = True
+                        if (var5, var6) == (3, 7):
+                            grid_num = 6
+                            already_done = True
+                        if (var5, var6) == (5, 7):
+                            grid_num = 8
+                            already_done = True
+
+                if already_done == False:
+                    for i in range(0, 9):
+                        last_resort_num = random.randint(0, 8)
+                        if last_resort_num != 4 and check[last_resort_num] == "":
+                            grid_num = last_resort_num
 
         if cputurn == 3:
             for i in num_list1:
@@ -249,7 +300,6 @@ def playing_cpu():
                                 grid_num = (4 - i) + 4
                                 already_done = True
 
-            print(cpu_winning)
             if cpu_winning == False:
 
                 if already_done == False:
@@ -262,7 +312,6 @@ def playing_cpu():
                                         already_done = True
                                         num4 = i
                                         firstxx += 1
-                                        #print("hi2")
 
                 if already_done == False:
                     if firstxx == 1:
@@ -274,6 +323,21 @@ def playing_cpu():
                                         already_done = True
                                         num5 = i
                                         firstxx += 1
+
+                if already_done == False:
+                    for i in num_list1:
+                        for j in num_list2:
+                            if check[i] + check[j] == "xx":
+                                if j > i:
+                                    if j - i < 4 and j + i != 5 and j + i != 11:
+                                        if check[i - (j - i)] == "":
+                                            grid_num = i - (j - i)
+                                            already_done = True
+                                if i > j:
+                                    if i - j < 4 and j + i != 5 and j + i != 11:
+                                        if check[(i - j) + i] == "":
+                                            grid_num = (i - j) + i
+                                            already_done = True
 
                 if already_done == False:
                     if check[1] + check[4] + check[7] == "oox":
@@ -325,30 +389,39 @@ def playing_cpu():
                         if counter1 == 3:
                             if (num2 - num1) == 6:
                                 grid_num = num2 - 3
+                                already_done = True
+                                firstxox = False
                             if (num2 - num1) == 2:
                                 grid_num = num2 - 1
-                            firstxox = False
-                            already_done = True
+                                already_done = True
+                                firstxox = False
+
+                if already_done == False:
+                    for i in range(0, 9):
+                        last_resort_num = random.randint(0, 8)
+                        if last_resort_num != 4 and check[last_resort_num] == "":
+                            grid_num = last_resort_num
 
         if cputurn == 4:
             for i in num_list1:
                 for j in num_list2:
                     if check[i] + check[j] == "oo":
                         if j > i:
-                            if j - i < 3 and j + i != 5 and j + i != 11:
+                            if j - i < 4 and j + i != 5 and j + i != 11:
                                 var4 = i - (j - 1)
                                 if check[var4] == "":
                                     grid_num = var4
                                     cpu_winning = True
                                     var4 = 0
-
                         if i > j:
-                            if i - j < 3 and j + i != 5 and j + i != 11:
+                            if i - j < 4 and j + i != 5 and j + i != 11:
                                 var4 = (i - j) + i
                                 if check[var4] == "":
                                     grid_num = var4
                                     cpu_winning = True
                                     var4 = 0
+                        ############### look here
+
             if already_done == False:
                 for i in range(0, 9):
                     if i != 4:
@@ -357,6 +430,52 @@ def playing_cpu():
                             if check[var4] == "":
                                 grid_num = (4 - i) + 4
                                 already_done = True
+
+            if already_done == False:
+                for i in num_list1:
+                    for j in num_list2:
+                        if check[i] + check[j] == "xx":
+                            if j > i:
+                                if j - i < 4 and j + i != 5 and j + i != 11:
+                                    if check[i - (j - i)] == "":
+                                        grid_num = i - (j - i)
+                                        already_done = True
+                            if i > j:
+                                if i - j < 4 and j + i != 5 and j + i != 11:
+                                    if check[(i - j) + i] == "":
+                                        grid_num = (i - j) + i
+                                        already_done = True
+            numl1_it2 = [7, 5, 3, 1]
+            numl2_it2 = [8, 6, 2, 0]
+            if already_done == False:
+                for i in range(2):
+                    if iteration == 1:
+                        list2_in_use = num_list2
+                    elif iteration == 2:
+                        list2_in_use = numl2_it2
+                    for i in list2_in_use:
+                        if counter1 == 1:
+                            if check[i] == "x":
+                                num1 = i
+                                test = True
+                        if counter1 == 2:
+                            if check[i] == "x":
+                                num2 = i
+                                counter1 = 3
+                                test = False
+                        if test == True:
+                            counter1 = 2
+                    if counter1 == 3:
+                        if (num2 - num1) == 6:
+                            if check[num2 - 3] == "":
+                                grid_num = num2 - 3
+                                already_done = True
+                        elif (num2 - num1) == 2:
+                            if check[num2 - 1] == "":
+                                grid_num = num2 - 1
+                                already_done = True
+                        else:
+                            iteration = 2
 
             if already_done == False:
                 if firstxx == 3:
@@ -404,12 +523,9 @@ def playing_cpu():
                     if var3 == 1:
                         grid_num = var1
                         already_done = True
-                        print(grid_num)
                     if var3 == 2:
                         grid_num = var2
                         already_done = True
-                        print(grid_num)
-
 
         if cputurn == 5:
             if first_play == "player":
@@ -431,13 +547,13 @@ def playing_cpu():
     for i in range(0, 9):
         if check[i] == "":
             counter2 += 1
-    print(counter3)
-    if counter3 == 9:
+    if counter3 >= 9:
         mode = "end"
-        print("it's a draw")
+        end_text = "it's a draw"
 
     if check_vict(check) == "oyes":
-        print("CPU wins")
+        end_text = "You Lose/n AI will rule the world"
+        counter3 = 9
         mode = "end"
 
     counter3 += 1
@@ -456,8 +572,6 @@ def playing_pvp(pos):
     grid_num = ((valy - 1) * 3) + valx
     grid_num = grid_num - 1
 
-    print(grid_num)
-
 
     #PLAYER1
     if turn % 2 != 0:
@@ -473,7 +587,7 @@ def playing_pvp(pos):
             turn -= 1
 
         if check_vict(check) == "xyes":
-            print("player 1 wins")
+            end_text = "Player1 Wins"
             mode = "end"
 
 
@@ -490,11 +604,12 @@ def playing_pvp(pos):
             turn -= 1
 
         if check_vict(check) == "oyes":
-            print("player 2 wins")
+            end_text = "Player2 Wins"
             mode = "end"
 
 def win_screen():
     pass
+
 #NB: checks if anyone has won
 def check_vict(list):
     if list[0] + list[4] + list[8] == "xxx":
