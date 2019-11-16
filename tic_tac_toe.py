@@ -30,11 +30,19 @@ counter3 = 0
 cputurn = 1
 end_text = ""
 first_play = "Player"
+animating = False
 center_first = False
 cpu_first = False
 firstxox = True
 firstxx = True
 still_playing = True
+
+def finished_waiting_animating():
+    global animating
+    animating = False
+
+def finished_animating():
+    clock.schedule(finished_waiting_animating, 0.5)
 
 def draw():
     global counter1
@@ -70,7 +78,16 @@ def draw():
         counter1 += 1
 
     if mode == "end":
-        end_back.draw()
+        if animating:
+            grid.draw()
+
+            for cross in crosses:
+                cross.draw()
+            for nought in noughts:
+                nought.draw()
+        else:
+            end_back.draw()
+
 
 def on_key_down(key):
     global mode
@@ -117,7 +134,8 @@ def playing_p(pos):
     if check[grid_num] == "":
         destination_pos = ((valx * cell_size) - 80, (valy * cell_size) - 82)
         cross = Actor("ximage1", (0, 0))
-        animate(cross, pos=destination_pos)
+        animating = True
+        animate(cross, pos=destination_pos, on_finished = finished_animating)
         crosses.append(cross)
         check[grid_num] = "x"
         turn += 1
@@ -141,6 +159,7 @@ def playing_cpu():
     global still_playing
     global counter3
     global mode
+    global animating
     random_num1 = 0
     random_num2 = 0
     last_resort_num = 0
@@ -420,7 +439,27 @@ def playing_cpu():
                                     grid_num = var4
                                     cpu_winning = True
                                     var4 = 0
-                        ############### look here
+
+            if already_done == False:
+                for i in num_list2:
+                    if counter1 == 1:
+                        if check[i] == "o":
+                            num1 = i
+                            test = True
+                    if counter1 == 2:
+                        if check[i] == "o":
+                            num2 = i
+                            counter1 = 3
+                            test = False
+                    if test == True:
+                        counter1 = 2
+                if counter1 == 3:
+                    if (num2 - num1) == 6 and check[num2 - 3] == "":
+                        grid_num = num2 - 3
+                        already_done = True
+                    if (num2 - num1) == 2 and check[num2 - 1] == "":
+                        grid_num = num2 - 1
+                        already_done = True
 
             if already_done == False:
                 for i in range(0, 9):
@@ -538,10 +577,10 @@ def playing_cpu():
 
         destination_pos = ((cpux * cell_size) - 80, (cpuy * cell_size) - 82)
         nought = Actor("oimage1", (0, 0))
-        animate(nought, pos=destination_pos)
+        animating = True
+        animate(nought, pos=destination_pos, on_finished = finished_animating)
         noughts.append(nought)
         check[grid_num] = "o"
-
         counter2 = 0
 
     for i in range(0, 9):
