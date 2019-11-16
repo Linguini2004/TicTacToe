@@ -27,6 +27,7 @@ size_down = 3
 grid_num = 0
 counter1 = 0
 counter3 = 0
+draw_counter = 0
 cputurn = 1
 end_text = ""
 first_play = "Player"
@@ -87,6 +88,12 @@ def draw():
                 nought.draw()
         else:
             end_back.draw()
+            screen.draw.textbox(
+            end_text,(20,0,300,80), background = None,
+            color = "white", fontname = "dpcomic", align="left")
+            screen.draw.textbox(
+            "Created by:\nDavide Masini",(10,450,100,40), background = None,
+            color = "white", fontname = "dpcomic", align="left")
 
 
 def on_key_down(key):
@@ -160,6 +167,7 @@ def playing_cpu():
     global counter3
     global mode
     global animating
+    global end_text
     random_num1 = 0
     random_num2 = 0
     last_resort_num = 0
@@ -588,10 +596,10 @@ def playing_cpu():
             counter2 += 1
     if counter3 >= 9:
         mode = "end"
-        end_text = "it's a draw"
+        end_text = "It's a draw"
 
     if check_vict(check) == "oyes":
-        end_text = "You Lose/n AI will rule the world"
+        end_text = "You Lose\n AI will rule the world"
         counter3 = 9
         mode = "end"
 
@@ -601,7 +609,13 @@ def playing_cpu():
 def playing_pvp(pos):
     global grid_num
     global turn
+    global mode
+    global animating
+    global end_text
+    global draw_counter
+    already_won = False
     turn += 1
+    draw_counter += 1
     x, y = pos
 
     valx = (x // cell_size) + 1
@@ -618,7 +632,8 @@ def playing_pvp(pos):
         if check[grid_num] == "":
             destination_pos = ((valx * cell_size) - 80, (valy * cell_size) - 82)
             cross = Actor("ximage1", (0, 0))
-            animate(cross, pos=destination_pos)
+            animating = True
+            animate(cross, pos=destination_pos, on_finished = finished_animating)
             crosses.append(cross)
             check[grid_num] = "x"
         else:
@@ -627,6 +642,7 @@ def playing_pvp(pos):
 
         if check_vict(check) == "xyes":
             end_text = "Player1 Wins"
+            already_won = True
             mode = "end"
 
 
@@ -635,7 +651,8 @@ def playing_pvp(pos):
         if check[grid_num] == "":
             destination_pos = ((valx * cell_size) - 80, (valy * cell_size) - 82)
             nought = Actor("oimage1", (0, 0))
-            animate(nought, pos=destination_pos)
+            animating = True
+            animate(nought, pos=destination_pos, on_finished = finished_animating)
             noughts.append(nought)
             check[grid_num] = "o"
         else:
@@ -644,7 +661,13 @@ def playing_pvp(pos):
 
         if check_vict(check) == "oyes":
             end_text = "Player2 Wins"
+            already_won = True
             mode = "end"
+
+    if draw_counter >= 9 and not already_won:
+        mode = "end"
+        end_text = "It's a draw"
+
 
 def win_screen():
     pass
