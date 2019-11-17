@@ -7,6 +7,7 @@ menu_back = Actor("menu_background")
 end_back = Actor("end_background")
 button1 = Actor("1button", (150, 420))
 button2 = Actor("2button", (350, 420))
+reboot = Actor("reboot_button", (75, 375))
 
 crosses = []
 noughts = []
@@ -31,6 +32,7 @@ draw_counter = 0
 cputurn = 1
 end_text = ""
 first_play = "Player"
+player_done = False
 animating = False
 center_first = False
 cpu_first = False
@@ -88,6 +90,7 @@ def draw():
                 nought.draw()
         else:
             end_back.draw()
+            reboot.draw()
             screen.draw.textbox(
             end_text,(20,0,300,80), background = None,
             color = "white", fontname = "dpcomic", align="left")
@@ -103,14 +106,23 @@ def on_key_down(key):
 
 def on_mouse_down(pos):
     global mode
+    global counter3
+    global player_done
+    global grid_num
+
     x, y = pos
     if mode == "playing_pvp":
         playing_pvp(pos)
     elif mode == "playing_pvcpu":
         playing_p(pos)
-        clock.schedule(playing_cpu, 2.0)
+        if player_done == True:
+            counter3 += 1
+            player_done = False
+            clock.schedule(playing_cpu, 2.0)
     elif mode == "end":
-        win_screen()
+        if reboot.left < x < reboot.right and reboot.top < y < reboot.bottom:
+            print("hello")
+            mode = "menu"
 
 
     if mode == "menu":
@@ -122,12 +134,10 @@ def on_mouse_down(pos):
             mode = "playing_pvcpu"
 
 def playing_p(pos):
-    global grid_num
     global turn
     global check
-    global counter3
-    turn += 1
-    counter3 += 1
+    global player_done
+    global grid_num
     x, y = pos
 
     valx = (x // cell_size) + 1
@@ -138,20 +148,21 @@ def playing_p(pos):
 
     #Player
     #NB: x and y co-ordinates as tuple
+
     if check[grid_num] == "":
-        destination_pos = ((valx * cell_size) - 80, (valy * cell_size) - 82)
-        cross = Actor("ximage1", (0, 0))
-        animating = True
-        animate(cross, pos=destination_pos, on_finished = finished_animating)
-        crosses.append(cross)
-        check[grid_num] = "x"
-        turn += 1
-    else:
-        print("sorry, cell occupied")
-        turn -= 1
+        player_done = True
+        if player_done == True:
+            destination_pos = ((valx * cell_size) - 80, (valy * cell_size) - 82)
+            cross = Actor("ximage1", (0, 0))
+            animating = True
+            animate(cross, pos=destination_pos, on_finished = finished_animating)
+            crosses.append(cross)
+            check[grid_num] = "x"
+            turn += 1
+
 
     if check_vict(check) == "xyes":
-            end_text = "You Win/n so much for AI"
+            end_text = "You Win/nso much for AI"
             counter3 = 9
             mode = "end"
 
@@ -599,7 +610,7 @@ def playing_cpu():
         end_text = "It's a draw"
 
     if check_vict(check) == "oyes":
-        end_text = "You Lose\n AI will rule the world"
+        end_text = "You Lose\nAI will rule the world"
         counter3 = 9
         mode = "end"
 
