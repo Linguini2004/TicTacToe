@@ -121,8 +121,7 @@ def on_mouse_down(pos):
             clock.schedule(playing_cpu, 2.0)
     elif mode == "end":
         if reboot.left < x < reboot.right and reboot.top < y < reboot.bottom:
-            print("hello")
-            mode = "menu"
+            reset()
 
 
     if mode == "menu":
@@ -132,6 +131,31 @@ def on_mouse_down(pos):
         if button2.left < x < button2.right and button2.top <   y < button2.bottom:
             time.sleep(0.25)
             mode = "playing_pvcpu"
+
+def reset():
+    global check
+    global crosses
+    global mode
+    global noughts
+    global counter3
+    global cputurn
+    global firstxox
+    global firstxx
+    global still_playing
+    global turn
+    global draw_counter
+
+    draw_counter = 0
+    turn = 0
+    firstxox = True
+    firstxx = True
+    still_playing = True
+    cputurn = 1
+    check = ["","","","","","","","",""]
+    counter3 = 0
+    mode = "menu"
+    crosses.clear()
+    noughts.clear()
 
 def playing_p(pos):
     global turn
@@ -162,9 +186,9 @@ def playing_p(pos):
 
 
     if check_vict(check) == "xyes":
-            end_text = "You Win/nso much for AI"
-            counter3 = 9
-            mode = "end"
+        end_text = "You Win/nso much for AI"
+        counter3 = 9
+        mode = "end"
 
 def playing_cpu():
     #CPU
